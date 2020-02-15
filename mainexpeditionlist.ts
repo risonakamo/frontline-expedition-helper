@@ -5,24 +5,27 @@ const chalk=require("chalk");
 import {getExpeditionsFile} from "./expeditionloaders";
 import {convertExpeditionDataToArray} from "./currentexpeditionlist";
 
-const _expeditionDataHeader=[
-    "name",
-    chalk.green("gas"),
-    chalk.yellow("ammo"),
-    chalk.cyan("mre"),
-    chalk.magentaBright("parts"),
-    "doll",
-    "equip",
-    chalk.red("total")
-];
+// default initial expedition data header
+const _expeditionDataHeader2:ExpeditionDataHeader={
+    name:"name",
+    gas:chalk.green("gas"),
+    ammo:chalk.yellow("ammo"),
+    mre:chalk.cyan("mre"),
+    parts:chalk.magentaBright("parts"),
+    doll:"doll",
+    equip:"equip",
+    total:chalk.red("total")
+};
 
 export default class MainExpeditionList
 {
     private allExpeditions:ExpeditionData[] //list of all expeditions
+    private currentHeader:string[] //the header of the expedition table based on the sort
 
     constructor()
     {
         this.allExpeditions=null;
+        this.currentHeader=outputSortedHeader("name");
     }
 
     // load in expeditions from data file
@@ -57,6 +60,8 @@ export default class MainExpeditionList
         {
             _.reverse(this.allExpeditions);
         }
+
+        this.currentHeader=outputSortedHeader(field,reverse);
     }
 
     // return text string of expedition list
@@ -66,8 +71,28 @@ export default class MainExpeditionList
             return convertExpeditionDataToArray(x);
         });
 
-        flatdata.unshift(_expeditionDataHeader);
+        flatdata.unshift(this.currentHeader);
 
         return table(flatdata);
     }
+}
+
+// given some sort fields, output a header that represents the sort
+function outputSortedHeader(field:string,reverse?:boolean):string[]
+{
+    var expeditionheader={..._expeditionDataHeader2};
+    var sortcharacter=reverse?" ʌ":" v";
+
+    expeditionheader[field]=expeditionheader[field]+sortcharacter;
+
+    return [
+        expeditionheader.name,
+        expeditionheader.gas,
+        expeditionheader.ammo,
+        expeditionheader.mre,
+        expeditionheader.parts,
+        expeditionheader.doll,
+        expeditionheader.equip,
+        expeditionheader.total
+    ];
 }

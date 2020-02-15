@@ -29,3 +29,8 @@ interface IndexExpeditionData extends ExpeditionData
 
 // array version of expedition data. items need to appear in the same order
 type FlatExpeditionData=(string|number)[];
+
+interface ExpeditionDataHeader
+{
+    [key:string]:string
+}

@@ -19,7 +19,7 @@ async function main2()
 {
     var elist=new MainExpeditionList();
     await elist.loadAllExpeditions();
-    elist.sortByField("gas",true);
+    elist.sortByField("mre");
     console.log(elist.outputTextTable());
 }
 

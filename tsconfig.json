@@ -1,0 +1,13 @@
+{
+    "compilerOptions":{
+        "noImplicitAny":true
+    },
+    "include":[
+        "**/*.ts",
+        "**/*.d.ts",
+        "**/*.tsx"
+    ],
+    "exclude":[
+        "node_modules"
+    ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "frontline-expedition-helper",
+  "version": "1.0.0",
+  "dependencies": {
+    "blessed": "^0.1.81"
+  },
+  "scripts":{
+    "run":"node build/flexpedition",
+    "build":"webpack"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-typescript": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "fork-ts-checker-webpack-plugin": "^4.0.4",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
+  }
+}

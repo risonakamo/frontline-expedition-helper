@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "dependencies": {
     "blessed": "^0.1.81",
+    "chalk": "^3.0.0",
+    "csv-parser": "^2.3.2",
     "lodash": "^4.17.15",
     "text-table": "^0.2.0"
   },

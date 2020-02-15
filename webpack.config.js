@@ -1,4 +1,5 @@
 const ForkTsCheckerWebpackPlugin=require("fork-ts-checker-webpack-plugin");
+const nodeExternals=require("webpack-node-externals");
 // const CopyPlugin=require("copy-webpack-plugin");
 // const WebpackBar=require("webpackbar");
 
@@ -36,6 +37,10 @@ module.exports={
 
         // new WebpackBar()
     ],
+
+    externals:[nodeExternals()],
+    target:"node",
+    node:false,
 
     optimization:{
         splitChunks:{

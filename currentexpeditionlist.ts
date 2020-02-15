@@ -3,18 +3,20 @@ const _=require("lodash");
 const fs=require("fs");
 const csv=require("csv-parser");
 const blessed=require("blessed");
+const chalk=require("chalk");
 
 export default class MainExpeditionList
 {
-    expeditionList:BlessList
-    currentExpeditions:ExpeditionData[]
+    expeditionList:BlessList //the bless list
+    private currentExpeditions:ExpeditionData[] //list of expedition data
 
     constructor()
     {
         this.expeditionList=blessed.List({
             style:{
                 selected:{
-                    bg:"white"
+                    bg:"white",
+                    fg:"black"
                 }
             },
             keys:true
@@ -42,7 +44,7 @@ export default class MainExpeditionList
         this.loadExpeditions(this.currentExpeditions);
     }
 
-    // load the given expedition list
+    // load the given expedition list into the bless list
     loadExpeditions(data:ExpeditionData[]):void
     {
         var flatexpeditiondatas:FlatExpeditionData=_.map(data,(x:ExpeditionData):FlatExpeditionData=>{
@@ -88,12 +90,12 @@ function convertExpeditionDataToArray(data:ExpeditionData):FlatExpeditionData
 {
     return [
         data.name,
-        data.gas,
-        data.ammo,
-        data.mre,
-        data.parts,
+        chalk.green(data.gas),
+        chalk.yellow(data.ammo),
+        chalk.cyan(data.mre),
+        chalk.magentaBright(data.parts),
         data.doll,
         data.equip,
-        data.gas+data.ammo+data.mre+data.parts+data.doll+data.equip
+        chalk.red(data.gas+data.ammo+data.mre+data.parts+data.doll+data.equip)
     ];
 }

@@ -5,7 +5,7 @@ const chalk=require("chalk");
 
 import {getExpeditionsFile} from "./expeditionloaders";
 
-export default class MainExpeditionList
+export default class CurrentExpeditionList
 {
     expeditionList:BlessList //the bless list
     private currentExpeditions:ExpeditionData[] //list of expedition data

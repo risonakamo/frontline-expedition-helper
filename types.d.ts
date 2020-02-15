@@ -22,5 +22,10 @@ interface ExpeditionData
     total?:number
 }
 
+interface IndexExpeditionData extends ExpeditionData
+{
+    [field:string]:string|number
+}
+
 // array version of expedition data. items need to appear in the same order
 type FlatExpeditionData=(string|number)[];

@@ -1,17 +1,25 @@
 const blessed=require("blessed");
 
-import MainExpeditionList from "./currentexpeditionlist";
+import CurrentExpeditionList from "./currentexpeditionlist";
+import MainExpeditionList from "./mainexpeditionlist";
 
 async function main()
 {
     var screen:Screen=makeScreen();
-    var mainExpeditionList:MainExpeditionList=new MainExpeditionList();
-    await mainExpeditionList.loadInitialCurrentExpeditions();
+    var currentExpeditionList:CurrentExpeditionList=new CurrentExpeditionList();
+    await currentExpeditionList.loadInitialCurrentExpeditions();
 
-    mainExpeditionList.focus();
-    screen.append(mainExpeditionList.expeditionList);
+    currentExpeditionList.focus();
+    screen.append(currentExpeditionList.expeditionList);
 
     screen.render();
+}
+
+async function main2()
+{
+    var elist=new MainExpeditionList();
+    await elist.loadAllExpeditions();
+    elist.sortByField("gas",true);
 }
 
 function makeScreen():Screen
@@ -29,4 +37,5 @@ function makeScreen():Screen
     return screen;
 }
 
-main();
+// main();
+main2();

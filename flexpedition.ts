@@ -20,6 +20,7 @@ async function main2()
     var elist=new MainExpeditionList();
     await elist.loadAllExpeditions();
     elist.sortByField("gas",true);
+    console.log(elist.outputTextTable());
 }
 
 function makeScreen():Screen

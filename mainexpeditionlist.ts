@@ -1,6 +1,20 @@
 const _=require("lodash");
+const table=require("text-table");
+const chalk=require("chalk");
 
 import {getExpeditionsFile} from "./expeditionloaders";
+import {convertExpeditionDataToArray} from "./currentexpeditionlist";
+
+const _expeditionDataHeader=[
+    "name",
+    chalk.green("gas"),
+    chalk.yellow("ammo"),
+    chalk.cyan("mre"),
+    chalk.magentaBright("parts"),
+    "doll",
+    "equip",
+    chalk.red("total")
+];
 
 export default class MainExpeditionList
 {
@@ -43,12 +57,17 @@ export default class MainExpeditionList
         {
             _.reverse(this.allExpeditions);
         }
-
-        console.log(this.allExpeditions);
     }
 
-    outputTextTable():void
+    // return text string of expedition list
+    outputTextTable():string
     {
+        var flatdata=_.map(this.allExpeditions,(x:ExpeditionData)=>{
+            return convertExpeditionDataToArray(x);
+        });
 
+        flatdata.unshift(_expeditionDataHeader);
+
+        return table(flatdata);
     }
 }

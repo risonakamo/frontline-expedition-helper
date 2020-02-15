@@ -1,9 +1,9 @@
 const table=require("text-table");
 const _=require("lodash");
-const fs=require("fs");
-const csv=require("csv-parser");
 const blessed=require("blessed");
 const chalk=require("chalk");
+
+import {getExpeditionsFile} from "./expeditionloaders";
 
 export default class MainExpeditionList
 {
@@ -34,7 +34,7 @@ export default class MainExpeditionList
     // needs to be called to load the initial current expeditions
     async loadInitialCurrentExpeditions():Promise<void>
     {
-        this.currentExpeditions=await getInitialCurrentExpeditions();
+        this.currentExpeditions=await getExpeditionsFile("data/currentexpeditions.csv");
         this.syncCurrentExpeditionsList();
     }
 
@@ -55,38 +55,8 @@ export default class MainExpeditionList
     }
 }
 
-// grabs the expedition data from the file, returns a promise
-function getInitialCurrentExpeditions():Promise<ExpeditionData[]>
-{
-    return new Promise((resolve:Function)=>{
-        var thedata:ExpeditionData[]=[];
-
-        fs.createReadStream("data/currentexpeditions.csv")
-        .pipe(csv())
-        .on("data",(datarow:ExpeditionData)=>{
-            thedata.push(datarow);
-        })
-        .on("end",()=>{
-            resolve(_.map(thedata,fixExpeditionDataFromCsv));
-        });
-    });
-}
-
-// convert fields that need to be numbers in expedition data to numbers
-function fixExpeditionDataFromCsv(data:ExpeditionData):ExpeditionData
-{
-    return _.mapValues(data,(x:string,i:string):string|number=>{
-        if (i!="name")
-        {
-            return parseFloat(x);
-        }
-
-        return x;
-    });
-}
-
 // convert an ExpeditionData into FlatExpeditionData
-function convertExpeditionDataToArray(data:ExpeditionData):FlatExpeditionData
+export function convertExpeditionDataToArray(data:ExpeditionData):FlatExpeditionData
 {
     return [
         data.name,

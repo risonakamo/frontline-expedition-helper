@@ -4,18 +4,17 @@ const chalk=require("chalk");
 const stripAnsi=require("strip-ansi");
 
 import {getExpeditionsFile} from "./expeditionloaders";
-import {convertExpeditionDataToArray} from "./currentexpeditionlist";
 
 // default initial expedition data header
 const _expeditionDataHeader2:ExpeditionDataHeader={
-    name:"name",
+    name:chalk.white("name"),
     gas:chalk.green("gas"),
     ammo:chalk.yellow("ammo"),
     mre:chalk.cyan("mre"),
-    parts:chalk.magentaBright("parts"),
-    doll:"doll",
-    equip:"equip",
-    total:chalk.red("total")
+    parts:chalk.magenta("parts"),
+    doll:chalk.grey("doll"),
+    equip:chalk.grey("equip"),
+    total:chalk.yellowBright("total")
 };
 
 export default class MainExpeditionList
@@ -84,7 +83,7 @@ export default class MainExpeditionList
         var arraycombinedData:string[][]=_.map(combinedData,(x:DoubleExpeditionData)=>{
             return _.concat(
                 convertExpeditionDataToArray(x.data),
-                convertDifferenceDataToArray(x.data)
+                convertDifferenceDataToArray(x.diff)
             );
         });
 
@@ -118,6 +117,8 @@ export default class MainExpeditionList
     }
 }
 
+// output a string array that can serve as a header for the combined output text table of
+// the expedition list and difference list
 function outputSortedHeader2(field:string,diff?:boolean,reversed?:boolean):string[]
 {
     var mainheader:IndexExpeditionData={..._expeditionDataHeader2} as IndexExpeditionData;
@@ -178,7 +179,7 @@ function convertDifferenceDataToArray(data:ExpeditionData):FlatExpeditionData
     arraydata=_.map(arraydata,(x:number)=>{
         if (x>0)
         {
-            return chalk.green("+"+parseFloat(x.toFixed(2)));
+            return chalk.greenBright("+"+parseFloat(x.toFixed(2)));
         }
 
         else if (x<0)
@@ -192,4 +193,30 @@ function convertDifferenceDataToArray(data:ExpeditionData):FlatExpeditionData
     arraydata.unshift("  >  ");
 
     return arraydata;
+}
+
+// convert an ExpeditionData into FlatExpeditionData
+export function convertExpeditionDataToArray(data:ExpeditionData):FlatExpeditionData
+{
+    var formattedData:ExpeditionData=_.mapValues(data,(x:string|number,i:string)=>{
+        if (i=="name")
+        {
+            return x;
+        }
+
+        return parseFloat((x as number).toFixed(2));
+    });
+
+    formattedData.total=parseFloat((data.gas+data.ammo+data.mre+data.parts+data.doll+data.equip).toFixed(2));
+
+    return [
+        data.name,
+        chalk.green(formattedData.gas),
+        chalk.yellow(formattedData.ammo),
+        chalk.cyan(formattedData.mre),
+        chalk.magenta(formattedData.parts),
+        chalk.grey(formattedData.doll),
+        chalk.grey(formattedData.equip),
+        chalk.yellowBright(formattedData.total)
+    ];
 }

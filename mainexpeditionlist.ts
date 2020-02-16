@@ -27,7 +27,7 @@ export default class MainExpeditionList
     constructor()
     {
         this.allExpeditions=null;
-        this.currentHeader=outputSortedHeader("name");
+        this.currentHeader=outputSortedHeader2("name");
         this.differenceExpeditions=null;
     }
 
@@ -37,59 +37,7 @@ export default class MainExpeditionList
         this.allExpeditions=await getExpeditionsFile("data/expeditiondata.csv");
     }
 
-    // sort expeditions by the specified field as a string, reverse to have a reverse sort
-    sortByField(field:string,reverse?:boolean):void
-    {
-        if (!this.allExpeditions)
-        {
-            return;
-        }
-
-        this.allExpeditions.sort((a:IndexExpeditionData,b:IndexExpeditionData)=>{
-            if (a[field]>b[field])
-            {
-                return -1;
-            }
-
-            else if (a[field]<b[field])
-            {
-                return 1;
-            }
-
-            return 0;
-        });
-
-        if (reverse)
-        {
-            _.reverse(this.allExpeditions);
-        }
-
-        this.currentHeader=outputSortedHeader(field,reverse);
-    }
-
-    // return text string of expedition list
-    outputTextTable():string
-    {
-        var flatdata=_.map(this.allExpeditions,(x:ExpeditionData)=>{
-            return convertExpeditionDataToArray(x);
-        });
-
-        if (this.differenceExpeditions.length)
-        {
-            var differenceflatdata=_.map(this.differenceExpeditions,(x:ExpeditionData)=>{
-                return convertDifferenceDataToArray(x);
-            });
-
-            flatdata=_.map(flatdata,(x:FlatExpeditionData,i:number)=>{
-                return _.concat(x,differenceflatdata[i]);
-            });
-        }
-
-        flatdata.unshift(this.currentHeader);
-
-        return table(flatdata);
-    }
-
+    // output expedition list and difference list with specified sort settings
     outputTextTableSorted(field:string,difference?:boolean,reversed?:boolean):string
     {
         var combinedData:DoubleExpeditionData[]=_.map(this.allExpeditions,(x:ExpeditionData,i:number)=>{
@@ -168,26 +116,6 @@ export default class MainExpeditionList
     {
         this.calcDifference(this.allExpeditions[0] as IndexExpeditionData);
     }
-}
-
-// given some sort fields, output a header that represents the sort as an array of strings
-function outputSortedHeader(field:string,reverse?:boolean):string[]
-{
-    var expeditionheader={..._expeditionDataHeader2};
-    var sortcharacter=reverse?" ʌ":" v";
-
-    expeditionheader[field]=expeditionheader[field]+sortcharacter;
-
-    return [
-        expeditionheader.name,
-        expeditionheader.gas,
-        expeditionheader.ammo,
-        expeditionheader.mre,
-        expeditionheader.parts,
-        expeditionheader.doll,
-        expeditionheader.equip,
-        expeditionheader.total
-    ];
 }
 
 function outputSortedHeader2(field:string,diff?:boolean,reversed?:boolean):string[]

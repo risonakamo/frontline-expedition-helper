@@ -20,12 +20,14 @@ const _expeditionDataHeader2:ExpeditionDataHeader={
 export default class MainExpeditionList
 {
     private allExpeditions:ExpeditionData[] //list of all expeditions
+    private differenceExpeditions:ExpeditionData[] //mirror of expedition data that is calculated from a difference
     private currentHeader:string[] //the header of the expedition table based on the sort
 
     constructor()
     {
         this.allExpeditions=null;
         this.currentHeader=outputSortedHeader("name");
+        this.differenceExpeditions=null;
     }
 
     // load in expeditions from data file
@@ -75,9 +77,31 @@ export default class MainExpeditionList
 
         return table(flatdata);
     }
+
+    // updates the difference table given an expedition
+    calcDifference(expedition:IndexExpeditionData):void
+    {
+        this.differenceExpeditions=_.map(this.allExpeditions,(x:ExpeditionData)=>{
+            return _.mapValues(x,(y:number,i:string)=>{
+                if (i=="name")
+                {
+                    return y;
+                }
+
+                return y-(expedition[i] as number);
+            });
+        });
+
+        console.log(this.differenceExpeditions);
+    }
+
+    testCalcDifference():void
+    {
+        this.calcDifference(this.allExpeditions[0] as IndexExpeditionData);
+    }
 }
 
-// given some sort fields, output a header that represents the sort
+// given some sort fields, output a header that represents the sort as an array of strings
 function outputSortedHeader(field:string,reverse?:boolean):string[]
 {
     var expeditionheader={..._expeditionDataHeader2};

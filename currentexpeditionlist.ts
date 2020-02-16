@@ -66,6 +66,6 @@ export function convertExpeditionDataToArray(data:ExpeditionData):FlatExpedition
         chalk.magentaBright(data.parts),
         data.doll,
         data.equip,
-        chalk.red(data.gas+data.ammo+data.mre+data.parts+data.doll+data.equip)
+        chalk.red(parseFloat((data.gas+data.ammo+data.mre+data.parts+data.doll+data.equip).toFixed(2)))
     ];
 }

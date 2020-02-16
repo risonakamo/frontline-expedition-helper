@@ -73,6 +73,17 @@ export default class MainExpeditionList
             return convertExpeditionDataToArray(x);
         });
 
+        if (this.differenceExpeditions.length)
+        {
+            var differenceflatdata=_.map(this.differenceExpeditions,(x:ExpeditionData)=>{
+                return convertDifferenceDataToArray(x);
+            });
+
+            flatdata=_.map(flatdata,(x:FlatExpeditionData,i:number)=>{
+                return _.concat(x,differenceflatdata[i]);
+            });
+        }
+
         flatdata.unshift(this.currentHeader);
 
         return table(flatdata);
@@ -91,8 +102,6 @@ export default class MainExpeditionList
                 return y-(expedition[i] as number);
             });
         });
-
-        console.log(this.differenceExpeditions);
     }
 
     testCalcDifference():void
@@ -119,4 +128,37 @@ function outputSortedHeader(field:string,reverse?:boolean):string[]
         expeditionheader.equip,
         expeditionheader.total
     ];
+}
+
+// do the same thing as convert expedition data to array, except with special things
+// for difference data version of ExpeditionData
+function convertDifferenceDataToArray(data:ExpeditionData):FlatExpeditionData
+{
+    var arraydata:(string|number)[]=[
+        data.gas,
+        data.ammo,
+        data.mre,
+        data.parts,
+        data.doll,
+        data.equip,
+        data.gas+data.ammo+data.mre+data.parts+data.doll+data.equip
+    ];
+
+    arraydata=_.map(arraydata,(x:number)=>{
+        if (x>0)
+        {
+            return chalk.green("+"+parseFloat(x.toFixed(2)));
+        }
+
+        else if (x<0)
+        {
+            return chalk.red(parseFloat(x.toFixed(2)));
+        }
+
+        return chalk.white(0);
+    });
+
+    arraydata.unshift("  >  ");
+
+    return arraydata;
 }

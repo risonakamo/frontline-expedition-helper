@@ -1,6 +1,7 @@
 const _=require("lodash");
 const table=require("text-table");
 const chalk=require("chalk");
+const stripAnsi=require("strip-ansi");
 
 import {getExpeditionsFile} from "./expeditionloaders";
 import {convertExpeditionDataToArray} from "./currentexpeditionlist";
@@ -52,10 +53,10 @@ export default class MainExpeditionList
 
             else if (a[field]<b[field])
             {
-                return 0;
+                return 1;
             }
 
-            return 1;
+            return 0;
         });
 
         if (reverse)
@@ -87,6 +88,65 @@ export default class MainExpeditionList
         flatdata.unshift(this.currentHeader);
 
         return table(flatdata);
+    }
+
+    outputTextTableSorted(field:string,difference?:boolean,reversed?:boolean):string
+    {
+        var combinedData:DoubleExpeditionData[]=_.map(this.allExpeditions,(x:ExpeditionData,i:number)=>{
+            return {
+                data:x,
+                diff:this.differenceExpeditions[i]
+            };
+        });
+
+        combinedData.sort((a:DoubleExpeditionData,b:DoubleExpeditionData)=>{
+            var a2:IndexExpeditionData;
+            var b2:IndexExpeditionData;
+
+            if (!difference)
+            {
+                a2=a.data as IndexExpeditionData;
+                b2=b.data as IndexExpeditionData;
+            }
+
+            else
+            {
+                a2=a.diff as IndexExpeditionData;
+                b2=b.diff as IndexExpeditionData;
+            }
+
+            if (a2[field]>b2[field])
+            {
+                return -1;
+            }
+
+            else if (a2[field]<b2[field])
+            {
+                return 1;
+            }
+
+            return 0;
+        });
+
+        if (reversed)
+        {
+            _.reverse(combinedData);
+        }
+
+        var arraycombinedData:string[][]=_.map(combinedData,(x:DoubleExpeditionData)=>{
+            return _.concat(
+                convertExpeditionDataToArray(x.data),
+                convertDifferenceDataToArray(x.data)
+            );
+        });
+
+        arraycombinedData.unshift(outputSortedHeader2(field,difference,reversed));
+
+        return table(arraycombinedData,{
+            stringLength:(x:string)=>{
+                return stripAnsi(x).length;
+            }
+        });
     }
 
     // updates the difference table given an expedition
@@ -128,6 +188,49 @@ function outputSortedHeader(field:string,reverse?:boolean):string[]
         expeditionheader.equip,
         expeditionheader.total
     ];
+}
+
+function outputSortedHeader2(field:string,diff?:boolean,reversed?:boolean):string[]
+{
+    var mainheader:IndexExpeditionData={..._expeditionDataHeader2} as IndexExpeditionData;
+    var diffheader:IndexExpeditionData={..._expeditionDataHeader2} as IndexExpeditionData;
+    delete diffheader.name;
+    var sortcharacter:string=reversed?" ʌ":" v";
+
+    if (!diff)
+    {
+        mainheader[field]=mainheader[field]+sortcharacter;
+    }
+
+    else
+    {
+        diffheader[field]=diffheader[field]+sortcharacter;
+    }
+
+    var headerarray:(string|number)[]=expeditionDataToArrayPlain(mainheader);
+    headerarray.push("  >  ");
+    return _.concat(headerarray,expeditionDataToArrayPlain(diffheader));
+}
+
+// converts expedition data to array in order without any special formatting
+function expeditionDataToArrayPlain(data:ExpeditionData):(string|number)[]
+{
+    var plainarray:(string|number)[]=[
+        data.gas,
+        data.ammo,
+        data.mre,
+        data.parts,
+        data.doll,
+        data.equip,
+        data.total
+    ];
+
+    if (data.name)
+    {
+        plainarray.unshift(data.name);
+    }
+
+    return plainarray;
 }
 
 // do the same thing as convert expedition data to array, except with special things

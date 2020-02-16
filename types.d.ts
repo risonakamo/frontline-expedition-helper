@@ -34,3 +34,9 @@ interface ExpeditionDataHeader
 {
     [key:string]:string
 }
+
+interface DoubleExpeditionData
+{
+    data:ExpeditionData
+    diff:ExpeditionData
+}

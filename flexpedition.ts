@@ -20,11 +20,9 @@ async function main2()
     var elist=new MainExpeditionList();
     await elist.loadAllExpeditions();
 
-    elist.sortByField("mre");
-
     elist.testCalcDifference();
 
-    console.log(elist.outputTextTable());
+    console.log(elist.outputTextTableSorted("parts"));
 }
 
 function makeScreen():Screen

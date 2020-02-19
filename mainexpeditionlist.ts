@@ -19,21 +19,24 @@ const _expeditionDataHeader2:ExpeditionDataHeader={
 
 export default class MainExpeditionList
 {
-    private allExpeditions:ExpeditionData[] //list of all expeditions
+    allExpeditions:ExpeditionData[] //list of all expeditions
+    allExpedtionsDict:KeyedExpeditionList //list of all expeditions, with keys
     private differenceExpeditions:ExpeditionData[] //mirror of expedition data that is calculated from a difference
-    private currentHeader:string[] //the header of the expedition table based on the sort
 
     constructor()
     {
         this.allExpeditions=null;
-        this.currentHeader=outputSortedHeader2("name");
         this.differenceExpeditions=null;
+        this.allExpedtionsDict=null;
     }
 
     // load in expeditions from data file
     async loadAllExpeditions():Promise<void>
     {
         this.allExpeditions=await getExpeditionsFile("data/expeditiondata.csv");
+        this.allExpedtionsDict=_.keyBy(this.allExpeditions,(x:ExpeditionData)=>{
+            return x.name;
+        });
     }
 
     // output expedition list and difference list with specified sort settings

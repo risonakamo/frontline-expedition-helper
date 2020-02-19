@@ -2,6 +2,8 @@ const blessed=require("blessed");
 
 import CurrentExpeditionList from "./currentexpeditionlist";
 import MainExpeditionList from "./mainexpeditionlist";
+import CurrentExpeditionList2 from "./currentexpeditionlist2";
+import {getCurrentExpeditions} from "./expeditionloaders";
 
 async function main()
 {
@@ -23,6 +25,9 @@ async function main2()
     elist.testCalcDifference();
 
     console.log(elist.outputTextTableSorted("parts"));
+
+    var currentlist=new CurrentExpeditionList2(elist.allExpeditions);
+    console.log(getCurrentExpeditions(elist.allExpedtionsDict));
 }
 
 function makeScreen():Screen

@@ -40,3 +40,14 @@ interface DoubleExpeditionData
     data:ExpeditionData
     diff:ExpeditionData
 }
+
+// dictionary of expeditions that is keyed by name
+interface KeyedExpeditionList
+{
+    [name:string]:ExpeditionData
+}
+
+interface CurrentExpeditions extends KeyedExpeditionList
+{
+
+}

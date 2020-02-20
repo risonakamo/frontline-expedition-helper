@@ -3,7 +3,6 @@ const blessed=require("blessed");
 import CurrentExpeditionList from "./currentexpeditionlist";
 import MainExpeditionList from "./mainexpeditionlist";
 import CurrentExpeditionList2 from "./currentexpeditionlist2";
-import {getCurrentExpeditions} from "./expeditionloaders";
 
 async function main()
 {
@@ -26,8 +25,8 @@ async function main2()
 
     console.log(elist.outputTextTableSorted("parts"));
 
-    var currentlist=new CurrentExpeditionList2(elist.allExpeditions);
-    console.log(getCurrentExpeditions(elist.allExpedtionsDict));
+    var currentlist=new CurrentExpeditionList2(elist.allExpedtionsDict);
+    console.log(currentlist.outputTextTable());
 }
 
 function makeScreen():Screen

@@ -1,7 +1,7 @@
 {
     "compilerOptions":{
         "noImplicitAny":true,
-        "target":"ES6"
+        "target":"ESNext"
     },
     "include":[
         "**/*.ts",

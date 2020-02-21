@@ -114,9 +114,10 @@ export default class MainExpeditionList
         });
     }
 
-    testCalcDifference():void
+    // perform difference calc using a choice string ("1-0","0-1")
+    calcDifferenceChoice(choice:string):void
     {
-        this.calcDifference(this.allExpeditions[0] as IndexExpeditionData);
+        this.calcDifference(this.allExpedtionsDict[choice] as IndexExpeditionData);
     }
 }
 

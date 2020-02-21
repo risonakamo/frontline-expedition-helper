@@ -51,3 +51,5 @@ interface CurrentExpeditions extends KeyedExpeditionList
 {
 
 }
+
+type BlessElement=any;

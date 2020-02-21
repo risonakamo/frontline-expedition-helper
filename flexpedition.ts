@@ -4,31 +4,6 @@ import CurrentExpeditionList from "./currentexpeditionlist";
 import MainExpeditionList from "./mainexpeditionlist";
 import CurrentExpeditionList2 from "./currentexpeditionlist2";
 
-async function main()
-{
-    var screen:Screen=makeScreen();
-    var currentExpeditionList:CurrentExpeditionList=new CurrentExpeditionList();
-    await currentExpeditionList.loadInitialCurrentExpeditions();
-
-    currentExpeditionList.focus();
-    screen.append(currentExpeditionList.expeditionList);
-
-    screen.render();
-}
-
-async function main2()
-{
-    var elist=new MainExpeditionList();
-    await elist.loadAllExpeditions();
-
-    elist.testCalcDifference();
-
-    console.log(elist.outputTextTableSorted("parts"));
-
-    var currentlist=new CurrentExpeditionList2(elist.allExpedtionsDict);
-    console.log(currentlist.outputTextTable());
-}
-
 async function main3()
 {
     var screen=makeScreen();
@@ -42,24 +17,31 @@ async function main3()
     var mainlistContent=mainlist.outputTextTableSorted("name").split("\n");
 
     var mainlistHeaderElement=blessed.Text({
-        content:mainlistContent.shift()
+        content:mainlistContent.shift(),
+        parent:screen
     });
 
     var mainlistElement=blessed.List({
         items:mainlistContent,
-        top:1,
+        parent:mainlistHeaderElement,
+        width:"100%",
+        height:mainlistContent.length,
+        bottom:-1,
         style:{
             selected:{
                 bg:"white",
                 fg:"black"
             }
         },
-        keys:true
+        keys:true,
+        interactive:false
     });
 
     var currentlistElement=blessed.List({
         items:currentlist.outputTextTable().split("\n"),
-        top:32,
+        bottom:-6,
+        width:55,
+        height:5,
         style:{
             selected:{
                 bg:"white",
@@ -68,10 +50,8 @@ async function main3()
         },
         keys:true
     });
+    mainlistElement.append(currentlistElement);
 
-    screen.append(mainlistHeaderElement);
-    screen.append(mainlistElement);
-    screen.append(currentlistElement);
     currentlistElement.focus();
 
     screen.render();

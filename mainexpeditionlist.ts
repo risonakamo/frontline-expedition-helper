@@ -12,8 +12,8 @@ const _expeditionDataHeader2:ExpeditionDataHeader={
     ammo:chalk.yellow("ammo"),
     mre:chalk.cyan("mre"),
     parts:chalk.magenta("parts"),
-    doll:chalk.grey("doll"),
-    equip:chalk.grey("equip"),
+    doll:chalk.white("doll"),
+    equip:chalk.white("equip"),
     total:chalk.yellowBright("total")
 };
 
@@ -140,7 +140,7 @@ function outputSortedHeader2(field:string,diff?:boolean,reversed?:boolean):strin
     }
 
     var headerarray:(string|number)[]=expeditionDataToArrayPlain(mainheader);
-    headerarray.push("  >  ");
+    headerarray.push("     ");
     return _.concat(headerarray,expeditionDataToArrayPlain(diffheader));
 }
 
@@ -218,8 +218,8 @@ export function convertExpeditionDataToArray(data:ExpeditionData):FlatExpedition
         chalk.yellow(formattedData.ammo),
         chalk.cyan(formattedData.mre),
         chalk.magenta(formattedData.parts),
-        chalk.grey(formattedData.doll),
-        chalk.grey(formattedData.equip),
+        chalk.white(formattedData.doll),
+        chalk.white(formattedData.equip),
         chalk.yellowBright(formattedData.total)
     ];
 }

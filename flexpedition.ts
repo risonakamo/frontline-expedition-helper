@@ -95,6 +95,8 @@ function applyDifference(choice:string,mainlist:MainExpeditionList,mainlistEleme
     var newcontent:string[]=mainlist.outputTextTableSorted("name").split("\n");
     newcontent.shift();
     mainlistElement.setItems(newcontent);
+    mainlistElement.interactive=true;
+    mainlistElement.focus();
     screen.render();
 }
 

@@ -22,9 +22,12 @@ export default class CurrentExpeditionList2
     // return text table of the current expeditions
     outputTextTable():string
     {
-        return table(_.map(this.currentExpeditions,(x:ExpeditionData)=>{
-            return convertExpeditionDataToArray(x);
-        }).sort());
+        return table([
+            ..._.map(this.currentExpeditions,(x:ExpeditionData)=>{
+                return convertExpeditionDataToArray(x);
+            }).sort(),
+            calcCurrentExpeditionTotal(this.currentExpeditions)
+        ]);
     }
 
     // given the name of a new expedition and an old expedition, swap out the old expedition
@@ -64,4 +67,23 @@ export default class CurrentExpeditionList2
 
         this.lastChosen=chosenExpedition;
     }
+}
+
+// calculate an array of totals from the current epxeditions list
+function calcCurrentExpeditionTotal(currentExpeditions:CurrentExpeditions):FlatExpeditionData
+{
+    var objecttotal:ExpeditionData=_.reduce(currentExpeditions,(r:any,x:ExpeditionData)=>{
+        return _.extendWith(r,x,(rv:number,xv:number,i:string)=>{
+            if (!rv)
+            {
+                return xv;
+            }
+
+            return rv+xv;
+        });
+    },{});
+
+    objecttotal["name"]="total";
+
+    return convertExpeditionDataToArray(objecttotal);
 }

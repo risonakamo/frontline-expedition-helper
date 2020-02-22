@@ -14,7 +14,7 @@ async function main3()
     var currentlist=new CurrentExpeditionList2(mainlist.allExpedtionsDict);
     mainlist.calcDifference(Object.values(currentlist.currentExpeditions)[0] as IndexExpeditionData);
 
-    var mainlistContent:string[]=mainlist.outputTextTableSorted("name").split("\n");
+    var mainlistContent:string[]=mainlist.outputTextTableSorted("name",false,true).split("\n");
 
     var mainlistHeaderElement:BlessList=blessed.Text({
         content:mainlistContent.shift(),
@@ -83,8 +83,6 @@ function makeScreen():Screen
         autoPadding:true
     });
 
-    screen.title="hello";
-
     screen.key(["q"],()=>{
         return process.exit();
     })
@@ -105,7 +103,7 @@ function applyDifference(choice:string,mainlist:MainExpeditionList,
     currentlist.setLastChosen(choice);
     mainlist.calcDifferenceChoice(choice);
 
-    var newcontent:string[]=mainlist.outputTextTableSorted("name").split("\n");
+    var newcontent:string[]=mainlist.outputTextTableSorted("name",false,true).split("\n");
 
     newcontent.shift();
 

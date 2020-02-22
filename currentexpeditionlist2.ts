@@ -24,7 +24,7 @@ export default class CurrentExpeditionList2
     {
         return table(_.map(this.currentExpeditions,(x:ExpeditionData)=>{
             return convertExpeditionDataToArray(x);
-        }));
+        }).sort());
     }
 
     // given the name of a new expedition and an old expedition, swap out the old expedition
@@ -37,7 +37,13 @@ export default class CurrentExpeditionList2
             return;
         }
 
-        this.currentExpeditions[replacedExpedition]=this.allExpeditionsDict[newExpedition];
+        else if (this.currentExpeditions[newExpedition])
+        {
+            return;
+        }
+
+        delete this.currentExpeditions[replacedExpedition];
+        this.currentExpeditions[newExpedition]=this.allExpeditionsDict[newExpedition];
     }
 
     // given a new expedition, swap with the last chosen expedition

@@ -58,7 +58,8 @@ async function main3()
             mainlist,
             mainlistElement,
             screen,
-            currentlist
+            currentlist,
+            mainlistHeaderElement
         );
     });
 
@@ -97,7 +98,8 @@ function convertChoiceToName(choice:string):string
 
 //given a bunch of stuff, use a choice to apply a difference to the mainlist, and update the main list element.
 function applyDifference(choice:string,mainlist:MainExpeditionList,
-    mainlistElement:BlessElement,screen:Screen,currentlist:CurrentExpeditionList2):void
+    mainlistElement:BlessElement,screen:Screen,currentlist:CurrentExpeditionList2,
+    mainlistHeaderElement:BlessElement):void
 {
     if (choice=="total")
     {
@@ -107,9 +109,9 @@ function applyDifference(choice:string,mainlist:MainExpeditionList,
     currentlist.setLastChosen(choice);
     mainlist.calcDifferenceChoice(choice);
 
-    var newcontent:string[]=mainlist.outputTextTableSorted("name",false,true).split("\n");
+    var newcontent:string[]=mainlist.outputTextTableSorted("parts",true,true).split("\n");
 
-    newcontent.shift();
+    mainlistHeaderElement.setContent(newcontent.shift());
 
     mainlistElement.setItems(newcontent);
     mainlistElement.interactive=true;

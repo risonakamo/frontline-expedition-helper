@@ -10,10 +10,9 @@ async function main3()
 
     var mainlist=new MainExpeditionList();
     await mainlist.loadAllExpeditions();
+    var currentlist=mainlist.currentList;
 
-    var currentlist=new CurrentExpeditionList2(mainlist.allExpedtionsDict);
-    mainlist.calcDifference(Object.values(currentlist.currentExpeditions)[0] as IndexExpeditionData);
-
+    mainlist.calcDifferenceInitial();
     var mainlistContent:string[]=mainlist.outputTextTableSorted("name",false,true).split("\n");
 
     var mainlistHeaderElement:BlessList=blessed.Text({

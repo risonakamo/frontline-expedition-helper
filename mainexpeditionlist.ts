@@ -4,6 +4,7 @@ const chalk=require("chalk");
 const stripAnsi=require("strip-ansi");
 
 import {getExpeditionsFile} from "./expeditionloaders";
+import CurrentExpeditionList2 from "./currentexpeditionlist2";
 
 // default initial expedition data header
 const _expeditionDataHeader2:ExpeditionDataHeader={
@@ -22,12 +23,14 @@ export default class MainExpeditionList
     allExpeditions:ExpeditionData[] //list of all expeditions
     allExpedtionsDict:KeyedExpeditionList //list of all expeditions, with keys
     private differenceExpeditions:ExpeditionData[] //mirror of expedition data that is calculated from a difference
+    currentList:CurrentExpeditionList2 //current list object
 
     constructor()
     {
         this.allExpeditions=null;
         this.differenceExpeditions=null;
         this.allExpedtionsDict=null;
+        this.currentList=null;
     }
 
     // load in expeditions from data file
@@ -37,6 +40,7 @@ export default class MainExpeditionList
         this.allExpedtionsDict=_.keyBy(this.allExpeditions,(x:ExpeditionData)=>{
             return x.name;
         });
+        this.currentList=new CurrentExpeditionList2(this.allExpedtionsDict);
     }
 
     // output expedition list and difference list with specified sort settings
@@ -118,6 +122,12 @@ export default class MainExpeditionList
     calcDifferenceChoice(choice:string):void
     {
         this.calcDifference(this.allExpedtionsDict[choice] as IndexExpeditionData);
+    }
+
+    // calculate an initial difference using the current expeditions
+    calcDifferenceInitial():void
+    {
+        this.calcDifference(Object.values(this.currentList)[0] as IndexExpeditionData);
     }
 }
 

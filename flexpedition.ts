@@ -100,6 +100,11 @@ function convertChoiceToName(choice:string):string
 function applyDifference(choice:string,mainlist:MainExpeditionList,
     mainlistElement:BlessElement,screen:Screen,currentlist:CurrentExpeditionList2):void
 {
+    if (choice=="total")
+    {
+        return;
+    }
+
     currentlist.setLastChosen(choice);
     mainlist.calcDifferenceChoice(choice);
 
